@@ -1,0 +1,40 @@
+:root {
+  --white: #fff;
+  --black: #242424;
+  --blue: #027ab680;
+  --blue-interactive: #027bb6;
+  background-color: var(--black);
+  color: var(--white);
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+
+  font-synthesis: none;
+
+  color-scheme: light dark;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  font-size: 16px;
+}
+
+.app {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  flex-direction: column;
+  max-width: 740px;
+  margin: 30px auto;
+}
