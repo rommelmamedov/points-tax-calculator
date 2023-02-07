@@ -1,0 +1,8 @@
+node_modules
+dist
+.prettierrc.js
+.eslintrc.js
+.DS_Store
+*.local
+env.d.ts
+node_modules/*
