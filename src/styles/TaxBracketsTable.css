@@ -1,0 +1,17 @@
+.tax-brackets-table {
+  width: 100%;
+  border: 1px solid var(--blue);
+}
+
+.tax-brackets-table :first-child tr:first-of-type > * {
+  background-color: var(--white);
+  color: var(--black);
+}
+
+.tax-brackets-table td,
+.tax-brackets-table th {
+  padding: 7px 12px;
+  border: 1px solid var(--blue);
+  font-weight: 700;
+  text-align: center;
+}
