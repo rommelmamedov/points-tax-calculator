@@ -1,10 +1,12 @@
-import { useCallback, useState } from 'react';
+import { SyntheticEvent, useCallback, useState } from 'react';
 
 import { CalculationForm } from '@points/components/CalculationForm';
 
 import { numberFormatter } from '@points/utils';
 import { defaultFormValues, percentOptions, preciseCurrencyOptions } from '@points/constants';
 import { AmountOfTaxesOwedPerBracket, FormValues } from '@points/types';
+import { fetchBracketsByYear } from '@points/api';
+import { getCalculationResults } from '@points/features';
 
 export const App = () => {
   const [error, setError] = useState('');
@@ -14,8 +16,33 @@ export const App = () => {
   const [formValues, setFormValues] = useState<FormValues>(defaultFormValues);
   const [amountOfTaxesOwedPerBracket, setAmountOfTaxesOwedPerBracket] = useState<AmountOfTaxesOwedPerBracket>({});
 
-  const handleSubmit = () => {
-    console.log('Submitting form...');
+  const handleSubmit = async (event: SyntheticEvent) => {
+    // NOTE: Prevents the page from reloading.
+    event.preventDefault();
+    const { salary, year } = formValues;
+    setIsLoading(true);
+
+    if (salary) {
+      const bracketsByYear = await fetchBracketsByYear(year);
+
+      if (bracketsByYear) {
+        const { amountOfTaxesOwedPerBracket, totalOwedTaxAmount, effectiveTaxRate } = getCalculationResults({
+          bracketsByYear,
+          salary,
+        });
+
+        setError('');
+        setEffectiveTaxRate(effectiveTaxRate);
+        setTotalOwedTaxAmount(totalOwedTaxAmount);
+        setAmountOfTaxesOwedPerBracket(amountOfTaxesOwedPerBracket);
+      } else {
+        setError('Error fetching tax brackets data. Please try again later.');
+        setEffectiveTaxRate(0);
+        setTotalOwedTaxAmount(0);
+        setAmountOfTaxesOwedPerBracket({});
+      }
+    }
+    setIsLoading(false);
   };
 
   const handleResetValues = useCallback(() => {
