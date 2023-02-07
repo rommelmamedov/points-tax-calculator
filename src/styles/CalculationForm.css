@@ -4,6 +4,12 @@
   align-items: flex-end;
 }
 
+.input-wrapper {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
 .salary-input,
 .tax-year-select {
   width: 240px;

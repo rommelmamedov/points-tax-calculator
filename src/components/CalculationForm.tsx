@@ -1,7 +1,9 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from 'react';
 
+import { YearSelect } from '@points/components/YearSelect';
+import { SalaryInput } from '@points/components/SalaryInput';
+
 import { FormValues } from '@points/types';
-import { taxYearOptions } from '@points/constants';
 
 import '@points/styles/CalculationForm.css';
 
@@ -21,26 +23,8 @@ export const CalculationForm = ({
   setFormValues,
 }: CalculationFormProps) => (
   <form id="calculation-form" onSubmit={handleSubmit}>
-    <input
-      className="salary-input"
-      type="number"
-      id="salary"
-      min={0}
-      name="salary"
-      placeholder="Please enter yearly salary"
-      // NOTE: This is a workaround for showing placeholder if value is undefined.
-      // Otherwise React will treat this input component as non-controlled.
-      value={formValues.salary ? formValues.salary : ''}
-      onChange={() => console.log('changed')}
-      required
-    />
-    <select className="tax-year-select" value={formValues.year} onChange={() => console.log('changed')} required>
-      {taxYearOptions.map(year => (
-        <option key={year} value={year}>
-          {year}
-        </option>
-      ))}
-    </select>
+    <SalaryInput onChange={setFormValues} value={formValues.salary} />
+    <YearSelect onChange={setFormValues} value={formValues.year} />
     <button type="submit" className="form-button" disabled={isLoading}>
       {isLoading ? 'Calculating...' : 'Calculate'}
     </button>
