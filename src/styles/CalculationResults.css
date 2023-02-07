@@ -1,0 +1,16 @@
+.calculation-results {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.amount-of-taxes-owed-per-bracket {
+  padding: 0 1em;
+  margin: 0;
+}
+
+em.value {
+  font-size: 20px;
+  margin-left: 6px;
+  color: var(--blue-interactive);
+}

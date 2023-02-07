@@ -10,6 +10,7 @@ import '@points/styles/CalculationForm.css';
 interface CalculationFormProps {
   formValues: FormValues;
   handleSubmit: (event: SyntheticEvent) => void;
+  hasCalculationResults: boolean;
   isLoading: boolean;
   onResetValues: () => void;
   setFormValues: Dispatch<SetStateAction<FormValues>>;
@@ -18,6 +19,7 @@ interface CalculationFormProps {
 export const CalculationForm = ({
   formValues,
   handleSubmit,
+  hasCalculationResults,
   isLoading,
   onResetValues,
   setFormValues,
@@ -28,8 +30,10 @@ export const CalculationForm = ({
     <button type="submit" className="form-button" disabled={isLoading}>
       {isLoading ? 'Calculating...' : 'Calculate'}
     </button>
-    <button className="form-button" onClick={onResetValues}>
-      Reset
-    </button>
+    {hasCalculationResults && (
+      <button className="form-button" onClick={onResetValues}>
+        Reset
+      </button>
+    )}
   </form>
 );

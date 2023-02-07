@@ -1,12 +1,14 @@
-import { SyntheticEvent, useCallback, useState } from 'react';
+import isEmpty from 'lodash/isEmpty';
+import { useState, SyntheticEvent, useCallback } from 'react';
 
 import { CalculationForm } from '@points/components/CalculationForm';
+import { TaxBracketsTable } from '@points/components/TaxBracketsTable';
+import { CalculationResults } from '@points/components/CalculationResults';
 
-import { numberFormatter } from '@points/utils';
-import { defaultFormValues, percentOptions, preciseCurrencyOptions } from '@points/constants';
-import { AmountOfTaxesOwedPerBracket, FormValues } from '@points/types';
 import { fetchBracketsByYear } from '@points/api';
+import { defaultFormValues } from '@points/constants';
 import { getCalculationResults } from '@points/features';
+import { FormValues, AmountOfTaxesOwedPerBracket } from '@points/types';
 
 export const App = () => {
   const [error, setError] = useState('');
@@ -48,8 +50,11 @@ export const App = () => {
   const handleResetValues = useCallback(() => {
     setEffectiveTaxRate(0);
     setTotalOwedTaxAmount(0);
+    setAmountOfTaxesOwedPerBracket({});
     setFormValues(defaultFormValues);
   }, []);
+
+  const hasCalculationResults = !isEmpty(amountOfTaxesOwedPerBracket);
 
   return (
     <div className="app">
@@ -57,30 +62,20 @@ export const App = () => {
       <CalculationForm
         formValues={formValues}
         handleSubmit={handleSubmit}
+        hasCalculationResults={hasCalculationResults}
         isLoading={isLoading}
         onResetValues={handleResetValues}
         setFormValues={setFormValues}
       />
       {error && <strong style={{ color: 'red' }}>{error}</strong>}
-      <div className="calculation-results">
-        <strong>Amount of taxes owed per bracket:</strong>
-        <ul className="amount-of-taxes-owed-per-bracket">
-          {Object.entries(amountOfTaxesOwedPerBracket).map(([key, value]) => (
-            <li key={key}>
-              <strong>{key}:</strong>
-              <em className="value">{numberFormatter(value, preciseCurrencyOptions)}</em>
-            </li>
-          ))}
-        </ul>
-        <div>
-          <strong>Total owed tax amount:</strong>
-          <em className="value">{numberFormatter(totalOwedTaxAmount, preciseCurrencyOptions)}</em>
-        </div>
-        <div>
-          <strong>Effective tax rate:</strong>
-          <em className="value">{numberFormatter(effectiveTaxRate, percentOptions)}</em>
-        </div>
-      </div>
+      {hasCalculationResults && (
+        <CalculationResults
+          amountOfTaxesOwedPerBracket={amountOfTaxesOwedPerBracket}
+          effectiveTaxRate={effectiveTaxRate}
+          totalOwedTaxAmount={totalOwedTaxAmount}
+        />
+      )}
+      <TaxBracketsTable />
     </div>
   );
 };
